@@ -19,6 +19,19 @@ class DebugCommand(commands.Cog):
         self.db = maindb.Database(self.bot)
         self.attack = attack.System(bot)
 
+    @commands.command()
+    async def exp(self, ctx, exp, user: discord.User = None):
+        try:
+            if ctx.author.id not in admin:
+                return await ctx.send(cmd_error_msg)
+            if not user:
+                user = ctx.author
+            user_id = user.id
+            msg = await self.db.add_exp(user_id, exp)
+            await ctx.send(f"<@{user_id}>は{exp}EXPを獲得した。\n{msg}")
+        except:
+            return await alldata.error_send(ctx)
+
     @commands.command(aliases=["effect"])
     async def effectid(self, ctx, effect_id: int, co: int = 1, co2: int = 1, user: discord.User = None, msg=None):
         try:
