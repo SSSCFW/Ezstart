@@ -7,7 +7,7 @@ discordのゲームBOTであるRe'startの簡易版です。
 * numpy-1.24.3
 * aiosqlite-0.19.0
 ## 初期設定
-info.jsonにtokenとclient_id(BOTのユーザーID)を入力
+info.jsonにtokenとclient_id(BOTのユーザーID)を入力。
 alldataにあるadminに自分のIDを追加(管理者)
 ## 実装コマンド
 ### game
