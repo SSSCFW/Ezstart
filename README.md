@@ -1,5 +1,6 @@
 # Ez'start (Eazy start)
-discordのゲームBOTであるRe'startの簡易版
+discordのゲームBOTであるRe'startの簡易版です。
+ご自由にお使いください。
 ## 動作環境
 * Python-3.11.0
 * discord.py-2.2.2
