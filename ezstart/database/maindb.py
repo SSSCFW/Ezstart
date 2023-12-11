@@ -42,8 +42,8 @@ class Database:
         # アイテム
         await cur.execute("CREATE TABLE IF NOT EXISTS item(user_id bigint, item_id bigint, count bigint, UNIQUE(user_id, item_id))")
         # 武器
-        await cur.execute("CREATE TABLE IF NOT EXISTS weapon(user_id bigint, weapon_id bigint, count bigint, point bigint, enchant text, "
-                            "act text, special bigint, id bigint, description text, name text, UNIQUE(user_id, item_id))")
+        #await cur.execute("CREATE TABLE IF NOT EXISTS weapon(user_id bigint, weapon_id bigint, count bigint, point bigint, enchant text, "
+        #                    "act text, special bigint, id bigint, description text, name text, UNIQUE(user_id, item_id))")
         # 素材
         await cur.execute("CREATE TABLE IF NOT EXISTS material(user_id bigint, material_id bigint, count bigint, UNIQUE(user_id, material_id))")
         # スキル
