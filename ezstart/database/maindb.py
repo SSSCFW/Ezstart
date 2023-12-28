@@ -7,7 +7,7 @@ import os
 
 
 async def connect_db():
-    db_path = "../ezstart/ezstart.db"
+    db_path = "./ezstart.db"
     if not os.path.exists(db_path):
         open(db_path, mode="w")
     conn = await aiosqlite.connect(db_path)
