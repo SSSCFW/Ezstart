@@ -3,10 +3,14 @@ from ezstart.database import alldata
 import math
 import aiosqlite
 import traceback
+import os
 
 
 async def connect_db():
-    conn = await aiosqlite.connect("../ezstart/ezstart.db")
+    db_path = "../ezstart/ezstart.db"
+    if not os.path.exists(db_path):
+        open(db_path, mode="w")
+    conn = await aiosqlite.connect(db_path)
     return conn
 
 
