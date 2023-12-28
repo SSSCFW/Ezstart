@@ -9,7 +9,7 @@ from discord.ext import commands
 info = json.load(open("json/info.json", "r", encoding="utf-8_sig"))
 
 
-class main(commands.Bot):
+class Main(commands.Bot):
     def __init__(self):
         Intents = discord.Intents.default()
         Intents.members = True
@@ -32,7 +32,6 @@ class main(commands.Bot):
         print(self.user.id)
         print('------')
         await self.db.create_table()
-
 
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
@@ -71,5 +70,5 @@ class main(commands.Bot):
             return await ctx.author.send(embed=msg)
 
 
-bot = main()
+bot = Main()
 bot.run(info["token"])
