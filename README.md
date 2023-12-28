@@ -1,12 +1,13 @@
 # Ez'start (Eazy start)
-discordのゲームBOTであるRe'startの簡易版
+discordのゲームBOTであるRe'startの簡易版です。
+ご自由にお使いください。
 ## 動作環境
 * Python-3.11.0
 * discord.py-2.2.2
 * numpy-1.24.3
 * aiosqlite-0.19.0
 ## 初期設定
-info.jsonにtokenとclient_id(BOTのユーザーID)を入力
+info.jsonにtokenとclient_id(BOTのユーザーID)を入力。
 alldataにあるadminに自分のIDを追加(管理者)
 ## 実装コマンド
 ### game

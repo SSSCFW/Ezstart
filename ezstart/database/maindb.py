@@ -45,6 +45,9 @@ class Database:
         await cur.execute("CREATE TABLE IF NOT EXISTS player(user_id bigint, exp bigint, monster bigint, ban bigint)")
         # アイテム
         await cur.execute("CREATE TABLE IF NOT EXISTS item(user_id bigint, item_id bigint, count bigint, UNIQUE(user_id, item_id))")
+        # 武器
+        #await cur.execute("CREATE TABLE IF NOT EXISTS weapon(user_id bigint, weapon_id bigint, count bigint, point bigint, enchant text, "
+        #                    "act text, special bigint, id bigint, description text, name text, UNIQUE(user_id, item_id))")
         # 素材
         await cur.execute("CREATE TABLE IF NOT EXISTS material(user_id bigint, material_id bigint, count bigint, UNIQUE(user_id, material_id))")
         # スキル
@@ -57,6 +60,8 @@ class Database:
         await cur.execute("CREATE TABLE IF NOT EXISTS channel_join(channel_id bigint, user_id bigint, hp bigint)")
         # 装備品
         await cur.execute("CREATE TABLE IF NOT EXISTS equipment(user_id bigint, equip_id bigint, equip text)")
+        
+        #await cur.execute("CREATE TABLE IF NOT EXISTS equipment(user_id bigint, equip_id bigint, equip_id2 bigint, equip_id3 bigint, equip text)")
         # 武器の熟練度
         await cur.execute("CREATE TABLE IF NOT EXISTS weapon_point(user_id bigint, weapon_id bigint, point bigint)")
         await self.main.commit()
