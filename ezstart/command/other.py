@@ -117,9 +117,10 @@ class OtherCommand(commands.Cog):
                 for channel in channels[(page * 10) - 10:]:
                     user = self.bot.get_user(channel[0])
                     player_exp = channel[1]
-                    if not user: continue
+                    if not user:
+                        continue
                     player_level = int(math.sqrt(player_exp))
-                    if not user.id in users:
+                    if user.id not in users:
                         users[user.id] = [user.name, player_level]
                     if len(users) >= 10: break
                 rank_msg = "\n".join("{:,}位：{} (Lv{:,})".format(i + 1+((page*10)-10), a[0], a[1]) for i, a in enumerate(users.values()))
