@@ -146,7 +146,7 @@ class OtherCommand(commands.Cog):
                         get_rank_msg = await rank(count)
                         embed = discord.Embed(title=f"**プレイヤーレベルのランキング**", description=f"```{get_rank_msg}```")
                         embed.set_footer(text=f"1/{max_page} ページ数を送信してください。(x:処理停止)", )
-                        msg = await ctx.send(embed=embed)
+                        await msg.edit(embed=embed)
                     else: continue
         except:
             if ctx.author.id in alldata.stop_command:
