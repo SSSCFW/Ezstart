@@ -169,7 +169,6 @@ class OtherCommand(commands.Cog):
             alldata.stop_command.append(ctx.author.id)
             # ASC: 昇順(値の小さい順)で取得 | 敢えて降順ではなく昇順で取得している。
             channels = await self.db.fetch("SELECT channel_id, enemy_level FROM channel_enemy ORDER BY enemy_level ASC")
-            max_page = len(channels) // 10 + 1
 
             # map関数でチャンネルIDをguildに変換。存在しないチャンネルIDはNoneにする。
             channel_to_guild = tuple(map(lambda x: (self.bot.get_channel(x[0]).guild if self.bot.get_channel(x[0]) else None, x[1]), channels))
@@ -179,6 +178,7 @@ class OtherCommand(commands.Cog):
             channels = list(filter(lambda x: x[0], channels))
             # レベルの降順に整理
             channels.sort(reverse=True, key=lambda x: x[1])
+            max_page = len(channels) // 10 + 1
 
             async def rank(page):
                 guilds = {}
