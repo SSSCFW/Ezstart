@@ -58,7 +58,7 @@ class Database:
         # 装備品
         await cur.execute("CREATE TABLE IF NOT EXISTS equipment(user_id bigint, equip_id bigint, equip text)")
         # 武器の熟練度
-        await cur.execute("CREATE TABLE IF NOT EXISTS weapon_point(user_id bigint, weapon_id bigint, point bigint)")
+        await cur.execute("CREATE TABLE IF NOT EXISTS weapon_point(user_id bigint, weapon_id bigint, point bigint, UNIQUE(user_id, weapon_id)")
         await self.main.commit()
         await cur.close()
 
