@@ -282,8 +282,9 @@ class System:
         rank_exp.setdefault(enemy_rank, 1)  # 存在しないランクは1倍
         status = jmespath.search("status", alldata.enemies[enemy_id])
         exp_mpl = rank_exp[enemy_rank]
-        if "exp" in status:
-            exp_mpl = status["exp"]
+        if status:
+            if "exp" in status:
+                exp_mpl = status["exp"]
         place = await self.db.get_place(channel_id)
         for member in members:
             member_id = member[1]
