@@ -81,22 +81,20 @@ class ItemCommand(commands.Cog):
                                   manage_messages=True, read_message_history=True)
     async def use(self, ctx, item_name, user: discord.User = None):
         try:
+            if item_name not in alldata.use_items:
+                return
             user_id = ctx.author.id
-            if item_name in ["魚", "f"]:
-                if not user:
-                    user = ctx.author
-                user_id2 = user.id
-                text = await self.item.fish(ctx, user_id, user_id2)
-                embed = discord.Embed(description=text)
-                return await ctx.reply(embed=embed)
-            if item_name in ["力のポーション", "p"]:
-                text = await self.item.potion_effect(ctx, user_id, 1002, 2, 7, 8, "\n(短縮形: p)")
-                embed = discord.Embed(description=text)
-                return await ctx.reply(embed=embed)
-            if item_name in ["俊敏のポーション", "s"]:
-                text = await self.item.potion_effect(ctx, user_id, 1001, 1, 3, 15, "\n(短縮形: s)")
-                embed = discord.Embed(description=text)
-                return await ctx.reply(embed=embed)
+            if not user:
+                user = ctx.author
+            user_id2 = user.id
+            item_id = alldata.use_items[item_name]
+            functions = { # 非同期関数
+                1001: (self.item.potion_effect, (ctx, user_id, 1001, 1, 3, 15)),
+                1002: (self.item.potion_effect, (ctx, user_id, 1002, 2, 7, 8)),
+                10000: (self.item.fish, (ctx, user_id, user_id2))
+            }
+            if item_id in functions:
+                await functions[item_id][0](*functions[item_id][1])
         except:
             return await alldata.error_send(ctx)
 
@@ -111,9 +109,10 @@ class ItemCommand(commands.Cog):
             alldata.stop_command.append(user_id)
             we_id = await self.db.get_equip(user_id, "weapon")
             we_list = "・0|なし\n"
+            temp_items_data = alldata.items.copy()
 
-            alldata.we_desc.setdefault(we_id, "--------------------------")
-            we_description = f"{alldata.we_desc[we_id]}"
+            temp_items_data.setdefault(we_id, {"des": "--------------------------"})
+            we_description = f"{alldata.items_data[we_id]['des']}"
 
             alldata.items.setdefault(we_id, f"存在しないアイテム: {we_id}")
             equip_name = alldata.items[we_id]
@@ -128,10 +127,10 @@ class ItemCommand(commands.Cog):
                 if user_id in alldata.stop_command:
                     alldata.stop_command.remove(user_id)
                 if await self.db.get_item_count(user_id, equip_id) or equip_id == 0:
-                    alldata.we_desc.setdefault(equip_id, "--------------------------")
+                    temp_items_data.setdefault(equip_id, {"des": "--------------------------"})
                     await self.db.set_equip(user_id, equip_id, "weapon")
                     equip_embed = discord.Embed(
-                        description=f"```diff\n+ 武器を「{alldata.items[equip_id]}」に変更しました。``````js\n{alldata.we_desc[equip_id]}```")
+                        description=f"```diff\n+ 武器を「{alldata.items[equip_id]}」に変更しました。``````js\n{alldata.items_data[equip_id]['des']}```")
                     if said_msg:
                         return await said_msg.edit(embed=equip_embed)
                     return await ctx.reply(embed=equip_embed)
@@ -195,7 +194,6 @@ class ItemCommand(commands.Cog):
                 if user_id in alldata.stop_command:
                     alldata.stop_command.remove(user_id)
                 if await self.db.get_skill_count(user_id, equip_id) or equip_id == 0:
-                    alldata.we_desc.setdefault(equip_id, "--------------------------")
                     await self.db.set_equip(user_id, equip_id, "skill")
                     equip_embed = discord.Embed(
                         description=f"```diff\n+ スキルを「{alldata.skills[equip_id]}」に変更しました。```")
@@ -263,7 +261,6 @@ class ItemCommand(commands.Cog):
                 if user_id in alldata.stop_command:
                     alldata.stop_command.remove(user_id)
                 if await self.db.get_item_count(user_id, equip_id) or equip_id == 0:
-                    alldata.we_desc.setdefault(equip_id, "--------------------------")
                     await self.db.set_equip(user_id, equip_id, "tool")
                     equip_embed = discord.Embed(
                         description=f"```diff\n+ 道具を「{alldata.items[equip_id]}」に変更しました。```")

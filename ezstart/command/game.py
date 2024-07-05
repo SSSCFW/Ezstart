@@ -1,3 +1,5 @@
+import jmespath
+
 from ezstart.database import alldata
 from ezstart.database import maindb
 from ezstart.function import attack
@@ -40,13 +42,40 @@ class GameCommand(commands.Cog):
         except:
             return await alldata.error_send(ctx)
 
+    @commands.command()
+    @commands.bot_has_permissions(read_messages=True, send_messages=True, embed_links=True, add_reactions=True,
+                                  manage_messages=True, read_message_history=True)
+    async def act(self, ctx, act_id: int):
+        try:
+            channel_id = ctx.channel.id
+            user_id = ctx.author.id
+            if user_id in alldata.stop_command or channel_id in alldata.channel_stop:
+                return
+
+            try:
+                alldata.channel_stop.append(channel_id)
+                weapon_id = await self.db.get_equip(user_id, "weapon")
+                acts = jmespath.search("status.acts", alldata.weapons_data[weapon_id])
+                if str(act_id) in acts:
+                    tp = await self.db.get_player_tp(user_id)
+                    necessary = alldata.acts_data[act_id]["tp"]
+                    if necessary <= tp:
+                        await self.attack.attack_system(ctx, user_id, channel_id, act_id)
+                    else:
+                        await ctx.reply(embed=alldata.em(f"```diff\n- TPが足りません。\n現在: {tp}\n必要: {necessary}```"))
+            finally:
+                if channel_id in alldata.channel_stop:
+                    alldata.channel_stop.remove(channel_id)
+        except:
+            return await alldata.error_send(ctx)
+
     @commands.command(aliases=["re", "rs"])
     @commands.bot_has_permissions(read_messages=True, send_messages=True, embed_links=True, add_reactions=True,
                                   manage_messages=True, read_message_history=True)
     async def reset(self, ctx):
         try:
             channel_id = ctx.channel.id
-            get_battle = await self.db.fetchrow("SELECT 0 FROM channel_join WHERE channel_id=?", (channel_id,))
+            get_battle = await self.db.fetchrow("SELECT 0 FROM channel_join WHERE channel_id=$1", (channel_id,))
             if get_battle:
                 await self.attack.next_battle(ctx, channel_id, False, 0, False)
             else:

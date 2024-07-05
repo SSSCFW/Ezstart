@@ -41,7 +41,7 @@ class OtherCommand(commands.Cog):
             rank = list(await self.db.fetchrow(
                 """SELECT 
                     (SELECT Count(0) FROM player WHERE player.exp > player1.exp) + 1 AS rank 
-                    FROM player AS player1 WHERE user_id=?""", (user_id,)))[0]
+                    FROM player AS player1 WHERE user_id=$1""", (user_id,)))[0]
             st_msg = f"```css\n[レベル] {player_level:,}\n[体力] {player_hp:,}\n[攻撃力] {atk:,}\n[経験値] {player_exp:,}\n" \
                      f"[次のレベルまで] {next_level:,}\n[倒した数] {enemy_count:,}体\n[ランク] {rank:,}位```"
             embed = discord.Embed(title=f"{user.name}", description=f"{st_msg}")
@@ -63,9 +63,9 @@ class OtherCommand(commands.Cog):
                     user_id = user.id
                 else:
                     return await ctx.send(alldata.cmd_error_msg)
-            user_name = self.bot.get_user(user_id)
+            user_name = self.bot.get_user(user_id).display_name
             player_level = await self.db.get_player_level(user_id)
-            battle = await self.db.fetchrow("SELECT channel_id FROM channel_join WHERE user_id=?", (user_id,))
+            battle = await self.db.fetchrow("SELECT channel_id FROM channel_join WHERE user_id=$1", (user_id,))
             if not battle:
                 des = "※このプレイヤーが戦闘に参加していなかったためモンスターはコマンドを打ったチャンネルの敵です。"
             if battle:
@@ -73,6 +73,8 @@ class OtherCommand(commands.Cog):
 
             player_max_hp = await self.db.player_max_hp(user_id)
             player_hp = await self.db.get_player_hp(user_id)
+            player_tp = await self.db.get_player_tp(user_id)
+            player_max_tp = await self.db.get_player_max_tp(user_id)
             if not player_hp and player_hp != 0:
                 player_hp = player_max_hp
 
@@ -80,6 +82,8 @@ class OtherCommand(commands.Cog):
             enemy_level = await self.db.get_enemy_level(channel_id)
             enemy_hp = await self.db.get_enemy_hp(channel_id)
             enemy_max_hp = await self.db.enemy_max_hp(channel_id)
+            enemy_tp = await self.db.get_enemy_tp(channel_id)
+            enemy_max_tp = await self.db.get_enemy_max_tp(channel_id)
 
             enemy_img = alldata.enemies[enemy_id]["img"]
             enemy_name = alldata.enemies[enemy_id]["name"]
@@ -87,17 +91,16 @@ class OtherCommand(commands.Cog):
             player_effect_msg = await self.attack.get_effect_msg(user_id)
             enemy_effect_msg = await self.attack.get_effect_msg(channel_id)
 
-            embed_enemy = discord.Embed(description=f"**{enemy_name}:  Lv.{enemy_level:,}**```css\n[HP] {enemy_hp:,}/{enemy_max_hp:,}```"
-                                                    f"```js\n{enemy_effect_msg}```")
-            embed_enemy.set_thumbnail(url=enemy_img)
-
-            embed_player = discord.Embed(description=f"**{user_name}:  Lv.{player_level:,}**```css\n[HP] {player_hp:,}/{player_max_hp:,}```"
-                                                     f"```js\n{player_effect_msg}```")
-            embed_player.set_thumbnail(url=ctx.author.display_avatar)
+            enemy_des = f"```css\n[HP] {enemy_hp:,}/{enemy_max_hp:,}\n[TP] {enemy_tp:,}/{enemy_max_tp}``````js\n{enemy_effect_msg}```"
+            player_des = f"```css\n[HP] {player_hp:,}/{player_max_hp:,}\n[TP] {player_tp:,}/{player_max_tp}``````js\n{player_effect_msg}```"
+            embed_status = discord.Embed()
+            embed_status.add_field(name=f"{user_name}: Lv.{player_level:,}", value=player_des)
+            embed_status.add_field(name=f"{enemy_name}: Lv.{enemy_level:,}", value=enemy_des)
+            embed_status.set_thumbnail(url=enemy_img)
 
             embed = discord.Embed(description=f"```fix\n戦闘状況```\n{des}")
 
-            embeds = [embed, embed_enemy, embed_player]
+            embeds = [embed, embed_status]
             return await ctx.reply(embeds=embeds)
         except:
             return await alldata.error_send(ctx)
@@ -122,7 +125,7 @@ class OtherCommand(commands.Cog):
                         continue
                     player_level = int(math.sqrt(player_exp))
                     if user.id not in users:
-                        users[user.id] = [user.name, player_level]
+                        users[user.id] = [user.display_name, player_level]
                     if len(users) >= 10: break
                 rank_msg = "\n".join("{:,}位：{} (Lv{:,})".format(i + 1 + ((page * 10) - 10), a[0], a[1]) for i, a in enumerate(users.values()))
                 if len(rank_msg) >= 1850:
