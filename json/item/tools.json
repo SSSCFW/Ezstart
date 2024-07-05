@@ -1,0 +1,52 @@
+{
+  "0": {
+    "name": "なし",
+    "des": "- 素手",
+    "status": {
+      "place": [1],
+      "rank": 0,
+      "get_luck": 0,
+      "count_luck": 0
+    }
+  },
+  "1": {
+    "name": "木のツルハシ",
+    "des": "最初に作るツルハシ。",
+    "status": {
+      "place": [1],
+      "rank": 0,
+      "get_luck": 0,
+      "count_luck": 0
+    }
+  },
+  "2": {
+    "name": "石のツルハシ",
+    "des": "硬いものが掘れるようになったツルハシ。",
+    "status": {
+      "place": [1, 2],
+      "rank": 1,
+      "get_luck": 0,
+      "count_luck": 0
+    }
+  },
+  "3": {
+    "name": "鉄のツルハシ",
+    "des": "より固いものが掘れるようになったツルハシ。",
+    "status": {
+      "place": [1, 2, 3],
+      "rank": 2,
+      "get_luck": 0,
+      "count_luck": 0
+    }
+  },
+  "10": {
+    "name": "釣り竿",
+    "des": "森林で釣りができる。魚以外も釣れるかも。。。？",
+    "status": {
+      "place": [1],
+      "rank": 100,
+      "get_luck": 0,
+      "count_luck": 0
+    }
+  }
+}

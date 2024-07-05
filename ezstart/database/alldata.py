@@ -34,16 +34,19 @@ stop_command = []
 channel_stop = []
 mine_cool_time = {}  # 採掘のクールタイム中の人
 
-admin = [345342072045174795]  # 管理者コマンドを使える人のid
+admin = (345342072045174795,)  # 管理者コマンドを使える人のid
 cmd_error_msg = "```diff\n- お前は誰だ?```"  # 特定の人しか使えないコマンド
 
 batu = "🚫"
 
 # equipで使えるテキスト ここに追加しないと新しい装備を追加することはできない。(無駄な種類を増やさないため)
-equips = ["weapon", "skill", "tool"]
+equips = ("weapon", "skill", "tool")
 
 # エフェクト一覧
-effects = {1: "素早さ上昇", 2: "攻撃力増加", 3: "毒"}
+effects_json = open("json/other/effects.json", "r", encoding="utf-8_sig")
+effects_data = {int(k): v for (k, v) in json.load(effects_json).items()}
+
+effects = {k: v["name"] for (k, v) in effects_data.items()}
 
 # 場所から採掘できるアイテム (アイテムと素材両方入力しないとダメ。)
 # 場所id: {"種類": {id: [最小個数, 最大個数, 確率, 最低必要ランク, 出現幸運影響値※1, 獲得幸運影響値※1]}}
@@ -63,58 +66,68 @@ place_mining = {
                      }},
 }
 
+weapons_json = open("json/item/weapons.json", "r", encoding="utf-8_sig")
+weapons_data = {int(k): v for (k, v) in json.load(weapons_json).items()}
+
+potions_json = open("json/item/potions.json", "r", encoding="utf-8_sig")
+potions_data = {int(k): v for (k, v) in json.load(potions_json).items()}
+
+tools_json = open("json/item/tools.json", "r", encoding="utf-8_sig")
+tools_data = {int(k): v for (k, v) in json.load(tools_json).items()}
+
+specials_json = open("json/item/specials.json", "r", encoding="utf-8_sig")
+specials_data = {int(k): v for (k, v) in json.load(specials_json).items()}
+
+materials_json = open("json/item/materials.json", "r", encoding="utf-8_sig")
+materials_data = {int(k): v for (k, v) in json.load(materials_json).items()}
+
+skills_json = open("json/item/skills.json", "r", encoding="utf-8_sig")
+skills_data = {int(k): v for (k, v) in json.load(skills_json).items()}
+
+places_json = open("json/other/places.json", "r", encoding="utf-8_sig")
+places_data = {int(k): v for (k, v) in json.load(places_json).items()}
+
+acts_json = open("json/other/acts.json", "r", encoding="utf-8_sig")
+acts_data = {int(k): v for (k, v) in json.load(acts_json).items()}
+
+items_data = tools_data | weapons_data | potions_data | specials_data
 # ツールの機能
-# ツールid: {"場所": [採掘可能場所], "採掘ランク": 数値が高いほど取れる種類が増える, "出現幸運": 数値が高いほど取れやすくなる, "獲得幸運": 数値が高いほど多く取れる・}
-can_mining = {
-    0: {"place": [1], "rank": 0, "get_luck": 0, "count_luck": 0},
-    1: {"place": [1, 2], "rank": 0, "get_luck": 0, "count_luck": 0},
-    2: {"place": [1, 2], "rank": 1, "get_luck": 0, "count_luck": 0},
-    3: {"place": [1, 2, 3], "rank": 2, "get_luck": 0, "count_luck": 0},
-    10: {"place": [1], "rank": 100, "get_luck": 0, "count_luck": 0}
-}
+# ツールid: {"場所": [採掘可能場所], "採掘ランク": 数値が高いほど取れる種類が増える, "出現幸運": 数値が高いほど取れやすくなる, "獲得幸運": 数値が高いほど多く取れる}
+# tools.jsonからstatusの部分だけ抜き出す
+can_mining = {k: v["status"] for (k, v) in tools_data.items()}
 
 # アイテム一覧
-tools = {1: "木のツルハシ", 2: "石のツルハシ", 3: "鉄のツルハシ", 10: "釣り竿"}
+tools = {k: v["name"] for (k, v) in tools_data.items()}
 
-weapons = {101: "木の剣", 102: "石の剣", 103: "EZの剣"}
+weapons = {k: v["name"] for (k, v) in weapons_data.items()}
 
-potions = {1001: "俊足のポーション", 1002: "力のポーション"}
+potions = {k: v["name"] for (k, v) in potions_data.items()}
 
-specials = {-2: "醸造台", -1: "金床", 0: "なし", 10000: "魚", 10001: "ゴミ"}
+specials = {k: v["name"] for (k, v) in specials_data.items()}
 
 # それぞれのアイテムの辞書を結合
 items = specials | tools | weapons | potions
+# useで使用できるアイテム (useというキーにある各要素をキーにしてそのアイテムのidを値にする。)
+use_items = {i: k for (k, v) in items_data.items() for i in ([] if "use" not in v else v["use"])}
 
 # 素材一覧
-materials = {1: "木材", 2: "丸石", 3: "石炭", 4: "鉄", 5: "ダイヤモンド", 6: "腐肉", 7: "骨", 8: "Kの手紙(破)"}
+materials = {k: v["name"] for (k, v) in materials_data.items()}
 
 # スキル一覧
-skills = {0: "なし", 1: "ポイズン"}
+skills = {k: v["name"] for (k, v) in skills_data.items()}
 
 # 場所一覧 ["名前", 解放レベル]
-places = {1: ["森林", 1], 2: ["浅い洞窟", 100], 3: ["深い洞窟", 300]}
-
-# 武器の説明
-we_desc = {
-    0: "- 素手",
-    101: "- 簡単に作れる剣。\n` 攻撃力が上昇する。",
-    102: "- 石でできた剣。\n` 攻撃力が上昇する。",
-    103: "- 簡単にできる剣。\n` 常に移動速度が上昇する。\n 相手に常に毒(Lv.1)を付与させる。"
-}
-
+places = places_data
 
 # 武器の攻撃力補正
 async def we_atk(bot, user_id, weapon):
     db = maindb.Database(bot)
     juk = 0.0000056 * await db.get_we_point(user_id, weapon)  # 熟練度による攻撃力ボーナス
 
-    we_atk_dict = {
-        101: 1.025+juk,
-        102: 1.04+juk,
-        103: 1.1+juk
-    }
-    we_atk_dict.setdefault(weapon, 1)  # 設定してない武器の場合
-    return we_atk_dict[weapon]
+    if not weapon in weapons_data: # 設定してない武器の場合
+        return 1
+    atk = weapons_data[weapon]["status"]["atk"]+juk*weapons_data[weapon]["status"]["bonus"]
+    return atk
 
 # banのメッセージ
 ban_message = {0: "+ OK", 1: "- BAN", 2: "生命体の真実を隠す者"}

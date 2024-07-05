@@ -1,0 +1,51 @@
+{
+  "101": {
+    "name": "木の剣",
+    "des": "- 簡単に作れる剣。\n` 攻撃力が上昇する。",
+    "status": {
+      "atk": 1.025,
+      "bonus": 1,
+      "acts": {
+        "1": {
+          "level": 1
+        }
+      }
+    }
+  },
+  "102": {
+    "name": "石の剣",
+    "des": "- 石でできた剣。\n` 攻撃力が上昇する。",
+    "status": {
+      "atk": 1.04,
+      "bonus": 1
+    }
+  },
+  "103": {
+    "name": "EZの剣",
+    "des": "- 簡単にできる剣。\n` 常に移動速度が上昇する。\n 相手に常に毒(Lv.1)を付与させる。",
+    "status": {
+      "atk": 1.1,
+      "bonus": 1,
+      "atk_enemy_effect": {
+        "3": {
+          "percent": 1,
+          "level": 1,
+          "count": 1,
+          "check": true,
+          "add_count": false,
+          "add_level": false
+        }
+      },
+      "atk_me_effect": {
+        "1": {
+          "percent": 1,
+          "level": 1,
+          "count": 1,
+          "check": true,
+          "add_count": false,
+          "add_level": false
+        }
+      }
+    }
+  }
+}

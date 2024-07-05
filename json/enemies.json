@@ -3,95 +3,153 @@
     "name": "ドラゴン",
     "id": 0,
     "rank": "★★★☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["飛"],
+    "status": {
+      "base": {
+        "hp": 1.2,
+        "atk": 1.1,
+        "speed": 1.2,
+        "exp": 10
+      },
+      "first_effect": {
+        "1": {
+          "level": 1,
+          "count": 3
+        }
+      }
+    }
   },
   {
     "name": "スライム",
     "id": 1,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
-  },  {
+    "img": "",
+    "element": ["無"]
+  },
+  {
     "name": "オーク",
     "id": 2,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "ゴブリン",
     "id": 3,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "ケンタウロス",
     "id": 4,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "オウルベア",
     "id": 5,
     "rank": "★★☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "マンドラゴラ",
     "id": 6,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "オーガ",
     "id": 7,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "ロック鳥",
     "id": 8,
     "rank": "★★☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "ガーゴイル",
     "id": 9,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "トレント",
     "id": 10,
     "rank": "★☆☆☆☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "時計",
     "id": 11,
     "rank": "★★★★☆☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "何がしたいかよくわからない絵",
     "id": 12,
     "rank": "★★★★★★☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "EzStart",
     "id": 13,
     "rank": "★★★★★★★",
-    "img": ""
+    "img": "",
+    "element": ["無"],
+    "status": {
+      "first_effect": {
+        "1": {
+          "level": 1,
+          "count": -2
+        },
+        "2": {
+          "level": 5,
+          "count": -2
+        }
+      },
+      "atk_effect": {
+        "3": {
+          "level": 2,
+          "count": 2,
+          "percent": 0.4,
+          "check": true,
+          "target": "user"
+        }
+      },
+      "acts": {
+        "1": {
+          "level": 1,
+          "percent": 0.6
+        }
+      }
+    }
   },
   {
     "name": "ドットthinking",
     "id": 14,
     "rank": "★★★★★☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   },
   {
     "name": "洞窟のコウモリ",
     "id": 15,
     "rank": "★★★★★☆☆",
-    "img": ""
+    "img": "",
+    "element": ["無"]
   }
 ]

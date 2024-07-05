@@ -2,10 +2,11 @@
 discordのゲームBOTであるRe'startの簡易版です。
 ご自由にお使いください。
 ## 動作環境
-* Python-3.11.0
-* discord.py-2.2.2
-* numpy-1.24.3
-* aiosqlite-0.19.0
+* Python-3.12.3
+* discord.py-2.3.2
+* numpy-1.26.4
+* aiosqlite-0.20.0
+* jmespath-1.0.1
 ## 初期設定
 * info.jsonにtokenとclient_id(BOTのユーザーID)を入力。
 * alldataにあるadminに自分のIDを追加(管理者)
