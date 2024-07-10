@@ -57,9 +57,9 @@ class Database:
         await cur.execute("CREATE TABLE IF NOT EXISTS effect(target_id bigint, effect_id bigint, level bigint, count bigint, "
                           "UNIQUE(target_id, effect_id))")
         # プレイヤーがチャンネルの戦闘に参加している時に使う
-        await cur.execute("CREATE TABLE IF NOT EXISTS channel_join(channel_id bigint UNIQUE, user_id bigint, hp bigint, tp bigint)")
+        await cur.execute("CREATE TABLE IF NOT EXISTS channel_join(channel_id bigint, user_id bigint, hp bigint, tp bigint, UNIQUE(channel_id, user_id))")
         # 装備品
-        await cur.execute("CREATE TABLE IF NOT EXISTS equipment(user_id bigint UNIQUE, equip_id bigint, equip text)")
+        await cur.execute("CREATE TABLE IF NOT EXISTS equipment(user_id bigint, equip_id bigint, equip text, UNIQUE(user_id, equip))")
         # 武器の熟練度
         await cur.execute("CREATE TABLE IF NOT EXISTS weapon_point(user_id bigint, weapon_id bigint, point bigint, upgrade bigint, UNIQUE(user_id, weapon_id))")
         # 装備品
